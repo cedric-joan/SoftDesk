@@ -16,10 +16,14 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
-from softDesk import views
+from rest_framework import routers
+from softDesk.urls import router as softDesk_router
+
+router = routers.DefaultRouter()
+router.registry.extend(softDesk_router.registry)
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api-auth/', include('rest_framework.urls')),
-    path('hello/', views.hello),
+    path('', include(router.urls)),
 ]
