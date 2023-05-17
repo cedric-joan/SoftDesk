@@ -13,6 +13,7 @@ class Projects(models.Model):
     type = models.CharField(choices=PROJECT_TYPES, max_length=9)
     # author_user = models.ForeignKey(to=settings.AUTH_USER_MODEL, on_delete=models.CASCADE):
 
+
     def __str__(self) -> str:
         return f'[Projects:{self.id} {self.title}]'
     
@@ -31,7 +32,7 @@ class Contributors(models.Model):
     ]
 
     # user = models.ForeignKey(to=settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-    project = models.ForeignKey(to=Projects, on_delete=models.CASCADE)
+    project = models.ForeignKey(to=Projects, on_delete=models.CASCADE, related_name="contributor")
     permission = models.CharField(max_length=4, choices=CONTRIBUTOR_PERMISSIONS)
     role = models.CharField(max_length=11, choices=CONTRIBUTOR_ROLES)
 
@@ -41,7 +42,7 @@ class Contributors(models.Model):
 class Issues(models.Model):
     ISSUE_TAGS = [
         ('B', 'Bug'),
-        ('M', 'Maintenance'),
+        ('T', 'Task'),
         ('U', 'Upgrade')
     ]
 
@@ -52,16 +53,16 @@ class Issues(models.Model):
     ]
 
     ISSUE_STATUSES = [
-        ('T', 'TBD'),
-        ('A', 'Assigned'),
+        ('I', 'InProgress'),
+        ('T', 'ToDo'),
         ('C', 'Close')
     ]
     title = models.CharField(max_length=64)
     desc = models.TextField(max_length=512)
     tag = models.CharField(choices=ISSUE_TAGS, max_length=1)
-    project = models.ForeignKey(to=Projects, on_delete=models.CASCADE)
-    priority = models.CharField(choices=ISSUE_PRIORITIES, max_length=5, default='L')
-    status = models.CharField(choices=ISSUE_STATUSES, max_length=8, default='T')
+    project = models.ForeignKey(to=Projects, on_delete=models.CASCADE, related_name="projet")
+    priority = models.CharField(choices=ISSUE_PRIORITIES, max_length=45, default='L')
+    status = models.CharField(choices=ISSUE_STATUSES, max_length=45, default='T')
     # author_user = models.ForeignKey(to=settings.AUTH_USER_MODEL, on_delete=models.CASCADE):
     assignee_user = models.ForeignKey(to=Contributors, on_delete=models.CASCADE)
     created_time = models.DateTimeField(auto_now=True)
@@ -74,7 +75,7 @@ class Issues(models.Model):
 class Comments(models.Model):
     description = models.TextField(max_length=512)
     # author_user = models.ForeignKey(to=settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-    issue = models.ForeignKey(to=Issues, on_delete=models.CASCADE)
+    issue = models.ForeignKey(to=Issues, on_delete=models.CASCADE, related_name="comment")
     created_time = models.DateTimeField(auto_now=True)
 
     def __str__(self):
