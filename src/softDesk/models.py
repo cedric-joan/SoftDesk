@@ -58,9 +58,9 @@ class Issues(models.Model):
         ('C', 'Close')
     ]
     title = models.CharField(max_length=64)
-    desc = models.TextField(max_length=512)
+    # description = models.TextField(max_length=512, blank=True)
     tag = models.CharField(choices=ISSUE_TAGS, max_length=1)
-    project = models.ForeignKey(to=Projects, on_delete=models.CASCADE, related_name="projet")
+    project = models.ForeignKey(to=Projects, on_delete=models.CASCADE, related_name="issue")
     priority = models.CharField(choices=ISSUE_PRIORITIES, max_length=45, default='L')
     status = models.CharField(choices=ISSUE_STATUSES, max_length=45, default='T')
     # author_user = models.ForeignKey(to=settings.AUTH_USER_MODEL, on_delete=models.CASCADE):
@@ -73,9 +73,9 @@ class Issues(models.Model):
 
 
 class Comments(models.Model):
-    description = models.TextField(max_length=512)
+    description = models.TextField(max_length=512, blank=True)
     # author_user = models.ForeignKey(to=settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-    issue = models.ForeignKey(to=Issues, on_delete=models.CASCADE, related_name="comment")
+    issue = models.ForeignKey(to=Issues, on_delete=models.CASCADE, related_name="comment", blank=True)
     created_time = models.DateTimeField(auto_now=True)
 
     def __str__(self):
