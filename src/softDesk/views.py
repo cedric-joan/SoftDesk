@@ -9,23 +9,43 @@ class ProjectsViewSet(ModelViewSet):
     filterset_fields = ['title', 'type']
     # permission_classes = [IsAdminAuthenticated, IsStaffAuthenticated]
 
-
-class CommentsViewSet(ModelViewSet):
-    queryset = Comments.objects.all()
-    serializer_class = CommentsSerializer
-    filterset_fields = ['created_time']
-    # permission_classes = [IsAdminAuthenticated, IsStaffAuthenticated]
+    # def get_queryset(self):
+    #     project_author_user = Projects.objects.filter(author_user=self.request.user)
+    #     return project_author_user
 
 
 class ContributorsViewSet(ModelViewSet):
-    queryset = Contributors.objects.all()
     serializer_class = ContributorsSerializer
     filterset_fields = ['permission', 'role']
     # permission_classes = [IsAdminAuthenticated, IsStaffAuthenticated]
 
+    def get_queryset(self):
+        queryset = Contributors.objects.all()
+        project_id = self.request.GET.get('project_id')
+        if project_id is not None:
+            queryset = queryset.filter(project_id=project_id)
+        return queryset
+
+class CommentsViewSet(ModelViewSet):
+    serializer_class = CommentsSerializer
+    filterset_fields = ['created_time']
+    # permission_classes = [IsAdminAuthenticated, IsStaffAuthenticated]
+
+    def get_queryset(self):
+        queryset = Comments.objects.all()
+        issue_id = self.request.GET.get('issue_id')
+        if issue_id is not None:
+            queryset = queryset.filter(issue_id=issue_id)
+        return queryset
 
 class IssuesViewSet(ModelViewSet):
-    queryset = Issues.objects.all()
     serializer_class = IssuesSerializer
     filterset_fields = ['priority', 'status', 'created_time']
     # permission_classes = [IsAdminAuthenticated, IsStaffAuthenticated]
+
+    def get_queryset(self):
+        queryset = Issues.objects.all()
+        project_id = self.request.GET.get('project_id')
+        if project_id is not None:
+            queryset = queryset.filter(project_id=project_id)
+        return queryset

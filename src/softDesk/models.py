@@ -1,5 +1,6 @@
 from django.db import models
-# from django.conf import settings
+from django.conf.global_settings import AUTH_USER_MODEL
+
 
 class Projects(models.Model):
     PROJECT_TYPES = [
@@ -11,8 +12,7 @@ class Projects(models.Model):
     title = models.CharField(max_length=64)
     description = models.TextField(max_length=512)
     type = models.CharField(choices=PROJECT_TYPES, max_length=9)
-    # author_user = models.ForeignKey(to=settings.AUTH_USER_MODEL, on_delete=models.CASCADE):
-
+    author_user = models.ForeignKey(to=AUTH_USER_MODEL, on_delete=models.CASCADE, null=True)
 
     def __str__(self) -> str:
         return f'[Projects:{self.id} {self.title}]'
@@ -31,7 +31,7 @@ class Contributors(models.Model):
         ('C', 'Contributor')
     ]
 
-    # user = models.ForeignKey(to=settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    user = models.ForeignKey(to=AUTH_USER_MODEL, on_delete=models.CASCADE, null=True)
     project = models.ForeignKey(to=Projects, on_delete=models.CASCADE, related_name="contributor")
     permission = models.CharField(max_length=4, choices=CONTRIBUTOR_PERMISSIONS)
     role = models.CharField(max_length=11, choices=CONTRIBUTOR_ROLES)
@@ -63,8 +63,8 @@ class Issues(models.Model):
     project = models.ForeignKey(to=Projects, on_delete=models.CASCADE, related_name="issue")
     priority = models.CharField(choices=ISSUE_PRIORITIES, max_length=45, default='L')
     status = models.CharField(choices=ISSUE_STATUSES, max_length=45, default='T')
-    # author_user = models.ForeignKey(to=settings.AUTH_USER_MODEL, on_delete=models.CASCADE):
-    assignee_user = models.ForeignKey(to=Contributors, on_delete=models.CASCADE)
+    author_user = models.ForeignKey(to=AUTH_USER_MODEL, on_delete=models.CASCADE, null=True)
+    assignee_user = models.ForeignKey(to=Contributors, on_delete=models.CASCADE, blank=True)
     created_time = models.DateTimeField(auto_now=True)
 
     def __str__(self):
@@ -74,8 +74,8 @@ class Issues(models.Model):
 
 class Comments(models.Model):
     description = models.TextField(max_length=512, blank=True)
-    # author_user = models.ForeignKey(to=settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-    issue = models.ForeignKey(to=Issues, on_delete=models.CASCADE, related_name="comment", blank=True)
+    author_user = models.ForeignKey(to=AUTH_USER_MODEL, on_delete=models.CASCADE, null=True)
+    issue = models.ForeignKey(to=Issues, on_delete=models.CASCADE, related_name="comment", null=True)
     created_time = models.DateTimeField(auto_now=True)
 
     def __str__(self):

@@ -1,5 +1,5 @@
 from rest_framework import routers
 from authentication.views import UsersViewSet
 
-router = routers.DefaultRouter()
-router.register('users', UsersViewSet, basename='users')
+router = routers.SimpleRouter()
+router.register('signup', UsersViewSet, basename='signup'),

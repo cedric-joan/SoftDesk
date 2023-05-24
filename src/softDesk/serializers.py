@@ -3,25 +3,25 @@ from .models import Projects, Contributors, Comments, Issues
 
 class ProjectsSerializer(serializers.ModelSerializer):
 
-    issue = serializers.SerializerMethodField()
+    # issue = serializers.SerializerMethodField()
     class Meta:
         model = Projects
-        fields = ['id', 'title', 'description', 'type', 'contributor', 'issue']
+        fields = "__all__"
 
 
 class ContributorsSerializer(serializers.ModelSerializer):
     class Meta:
         model = Contributors
-        fields = ['id', 'project', 'role', 'permission']
+        fields = "__all__"
 
 
 class CommentsSerializer(serializers.ModelSerializer):
     class Meta:
         model = Comments
-        fields = ['id', 'description', ]
+        fields = "__all__"
 
 
 class IssuesSerializer(serializers.ModelSerializer):
     class Meta:
         model = Issues
-        fields = ['id', 'title', 'tag', 'priority', 'project']            
+        fields = "__all__"            
