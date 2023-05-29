@@ -8,6 +8,8 @@ class ProjectsSerializer(serializers.ModelSerializer):
         model = Projects
         fields = "__all__"
 
+        
+
 
 class ContributorsSerializer(serializers.ModelSerializer):
     class Meta:
