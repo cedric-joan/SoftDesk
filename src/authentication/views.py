@@ -1,13 +1,11 @@
 from django.contrib.auth.models import User
-from rest_framework.viewsets import ModelViewSet
-# from rest_framework.permissions import AllowAny
-from authentication.serializers import UserSerializer
+from rest_framework.generics import CreateAPIView
+from authentication.serializers import SignupSerializer
 
 
-class UsersViewSet(ModelViewSet):
+class SignupViewSet(CreateAPIView):
 
-    serializer_class = UserSerializer
-    # permission_classes = (AllowAny)
+    serializer_class = SignupSerializer
 
     def get_queryset(self):
         return User.objects.all()

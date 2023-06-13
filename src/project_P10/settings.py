@@ -131,15 +131,15 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 REST_FRAMEWORK = {
     'DEFAULT_PAGINATION_CLASS':'rest_framework.pagination.PageNumberPagination',
     'PAGE_SIZE':6,
-    # 'DEFAULT_AUTHENTICATION_CLASSES':
-    # ('rest_framework_simplejwt.authentication.JWTAuthentication'),
+    'DEFAULT_AUTHENTICATION_CLASSES':
+    ('rest_framework_simplejwt.authentication.JWTAuthentication',),
     'DEFAULT_FILTER_BACKENDS':[
         'django_filters.rest_framework.DjangoFilterBackend'
-    ]
+    ],
 }
 
 # Tokens limited in time
 SIMPLE_JWT = {
-    'ACCES_TOKEN_LIFETIME': timedelta(hours=7),
-    'REFRESH_TOKEN_LIFETIME': timedelta(days=1),
+    'ACCES_TOKEN_LIFETIME': timedelta(minutes=30),
+    'REFRESH_TOKEN_LIFETIMR': timedelta(days=1),
 }

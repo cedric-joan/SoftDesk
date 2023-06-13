@@ -1,41 +1,90 @@
-from rest_framework.permissions import BasePermission, SAFE_METHODS
-from django.shortcuts import get_object_or_404
-from .models import Contributors, Projects
+from django.core.exceptions import ObjectDoesNotExist
+from rest_framework import permissions
 
-MESSAGE_ERROR = "accès refusé !"
+from .models import Comments, Contributors, Issues, Projects
 
-class IsAuthorProjectsView(BasePermission):
+"""CUSTOM PERMISSIONS"""
 
-    def has_permission(self, request, project_id):
-        project = get_object_or_404(Projects, pk=project_id)
-        contributor = Contributors.objects.filter(project=project, user=request.user)
-        if project.author_user_id == request.user:
-            return True
-        if contributor.role == 'A':
-            return True
-        return MESSAGE_ERROR
 
-class IsAdminAuthenticated(BasePermission):
+class IsAuthorProjectsView(permissions.BasePermission):
+    """
+    Check if user is author or contributor for project
+    http_methods : destroy, update
+    """
+    def has_permission(self, request, view):
+        if view.action in ("destroy", "update"):
+            try:
+                content = Projects.objects.get(pk=view.kwargs["pk"])
+            except ObjectDoesNotExist:
+                return False
+            return content.author_user == request.user
+        return True
 
-    def has_permission(self, request):
-        return bool(request.user
-                    and request.user.is_authenticated
-                    and request.user.is_superuser)
-    
 
-class IsContributorProjectsView(BasePermission):
-     
-    def has_permission(self, request, project_id):
-        project = get_object_or_404(Projects, pk=project_id)
-        contributor = Contributors.objects.filter(project=project, user=request.user)
-        if project.author_user_id == request.user:
-            return True
-        if contributor.role == 'C':
-            return True
-        return MESSAGE_ERROR
-     
-    # def has_object_permission(self, request, obj):
-    #     if request.method in SAFE_METHODS:
-    #         return True
-    #     return bool(request.user == obj.author_user_id
-    #                 and request.user.is_authenticated)
+class IsAuthorContributorsView(permissions.BasePermission):
+    """
+    Check if user is the contributor of the project
+    http_methods : destroy, update
+    """
+    def has_permission(self, request, view):
+        if view.action in ("destroy", "update"):
+            try:
+                content = Projects.objects.get(pk=view.kwargs["pk"])
+            except ObjectDoesNotExist:
+                return False
+            return content.author_user == request.user
+        return True
+
+
+class IsAuthorContribIssue(permissions.BasePermission):
+    """
+    Check if user is author or contributor for a issue
+    http_methods : list, retrieve, create
+    """
+
+    def has_permission(self, request, view):
+        if view.action in ("list", "retrieve", "create"):
+            try:
+                project = Projects.objects.get(id=view.kwargs["pk"])
+            except ObjectDoesNotExist:
+                return False
+            is_contrib_issue = Contributors.objects.filter(
+                project_id=view.kwargs["projects_pk"]
+            ).filter(contrib_user=request.user.id)
+            if project.author_user == request.user or bool(is_contrib_issue):
+                return True
+            return False
+        if view.action in ("destroy", "update"):
+            try:
+                issue = Issues.objects.get(id=view.kwargs["pk"])
+            except ObjectDoesNotExist:
+                return False
+            return issue.author_user == request.user
+
+
+class IsAuthorContribComment(permissions.BasePermission):
+    """
+    Check if user is author or contributor for a comment
+    http_methods : list, retrieve, create
+    """
+
+    def has_permission(self, request, view):
+        if view.action in ("list", "retrieve", "create"):
+            try:
+                project = Projects.objects.get(id=view.kwargs["pk"])
+            except ObjectDoesNotExist:
+                return False
+            is_contributor_comment = Contributors.objects.filter(
+                project_id=view.kwargs["projects_pk"]
+            ).filter(contrib_user=request.user.id)
+
+            if project.author_user == request.user or bool(is_contributor_comment):
+                return True
+
+        if view.action in ("destroy", "update"):
+            try:
+                comment = Comments.objects.get(id=view.kwargs["pk"])
+            except ObjectDoesNotExist:
+                return False
+            return comment.author_user == request.user
+        return False
