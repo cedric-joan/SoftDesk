@@ -53,6 +53,6 @@ Adresse administrateur:
 ```
 http://127.0.0.1:8000/admin
 ```
-Vous pouvez à présent continuer de suivre les instructions de la documentation sur POSTMAN
+Vous pouvez à présent continuer de suivre les instructions de la documentation sur [POSTMAN](https://documenter.getpostman.com/view/21257311/2s93z58PWL)
 
 
