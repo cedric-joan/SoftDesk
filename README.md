@@ -5,7 +5,7 @@ Créer une API sécurisée RESTful en utilisant ``Django REST``.
 
 Cette application permettra à une communauté d'utilisateurs de remonter et suivre des problèmes techniques (issue tracking system).
 
-# Front-end
+# Fonctionnalités
 L'application présente les cas d'utilisations suivantes :
 
 1 - Une application de suivi des problèmes pour les trois plateformes (site web, application Android et iOS).
