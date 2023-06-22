@@ -96,9 +96,9 @@ class IssuesViewSet(ModelViewSet):
         if int(self.request.user.id) != int(user.id):
             raise ValidationError('Requesting user should equal to author_user')
         contributor_id = issue_data['assignee_user']
-        if not Contributors.objects.filter(project=project_id, user_id=contributor_id).exists():
+        if not Contributors.objects.filter(project=project_id, id=contributor_id).exists():
             raise ValidationError(f'Assignee_user {contributor_id} is not a contributor of the project')
-        assignee_user_id = Contributors.objects.get(user=contributor_id)
+        assignee_user_id = Contributors.objects.get(id=contributor_id)
         serializer = ProjectsSerializer(data=issue_data)
         if serializer.is_valid(raise_exception=True):
             Issues.objects.create(title=issue_data['title'], description=issue_data['description'],
