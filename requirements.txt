@@ -7,3 +7,4 @@ tzdata==2023.3
 django-filter
 djangorestframework-simplejwt
 drf-nested-routers
+flake8==6.0.0
