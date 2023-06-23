@@ -1,6 +1,7 @@
 from rest_framework.serializers import ModelSerializer
 from .models import Projects, Contributors, Comments, Issues
 
+
 class ProjectsSerializer(ModelSerializer):
 
     class Meta:

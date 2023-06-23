@@ -17,7 +17,7 @@ class Projects(models.Model):
 
     def __str__(self) -> str:
         return f'[Projects:{self.id} {self.title}]'
-    
+
 
 class Contributors(models.Model):
     CONTRIBUTOR_PERMISSIONS = [
@@ -39,7 +39,8 @@ class Contributors(models.Model):
 
     def __str__(self):
         return f'[Contributors:{self.id} {self.user}]'
-    
+
+
 class Issues(models.Model):
     ISSUE_TAGS = [
         ('B', 'Bug'),
@@ -80,4 +81,4 @@ class Comments(models.Model):
     created_time = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return f'[Comments:{self.id} {self.issue}]'    
+        return f'[Comments:{self.id} {self.issue}]'
