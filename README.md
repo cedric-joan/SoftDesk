@@ -10,7 +10,7 @@ L'application présente les cas d'utilisations suivantes :
 
 1 - Une application de suivi des problèmes pour les trois plateformes (site web, application Android et iOS).
 
-2 - L'application permettra esentiellement aux utilisateyrs de créer divers projets, d'ajouter des uttilisateurs à des projets spécifiques, de créer des problèmes au sein des projets et d'attribuer des libellés à ces problèmes en fonction de leurs priorités.
+2 - L'application permettra esentiellement aux utilisateurs de créer divers projets, d'ajouter des uttilisateurs à des projets spécifiques, de créer des problèmes au sein des projets et d'attribuer des libellés à ces problèmes en fonction de leurs priorités.
 
 3 - Les trois plateformes exploiteront les points de terminaison d'API qui serviront les données
 
